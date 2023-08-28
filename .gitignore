@@ -1,7 +1,7 @@
 .vagrant/
-files/*.rpm
-files/prometheus
-files/node_exporter
-files/apache_exporter
-files/nginx-prometheus-exporter
-files/*.tar.gz
+ansible/files/*.rpm
+ansible/files/prometheus
+ansible/files/node_exporter
+ansible/files/apache_exporter
+ansible/files/nginx-prometheus-exporter
+ansible/files/*.tar.gz
