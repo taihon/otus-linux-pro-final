@@ -1,1 +1,7 @@
 .vagrant/
+files/*.rpm
+files/prometheus
+files/node_exporter
+files/apache_exporter
+files/nginx-prometheus-exporter
+files/*.tar.gz
