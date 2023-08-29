@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - { role: ntp_client, tags: ntp_client_tag, become: yes }
+- hosts: frontends
+  roles:
+    - frontend_nginx
+  become: yes

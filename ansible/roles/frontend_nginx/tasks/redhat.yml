@@ -11,6 +11,11 @@
   ansible.builtin.systemd:
     name: nginx.service
     enabled: yes
+- name: Enable firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: yes
+    state: started
 - name: Open firewall ports
   ansible.posix.firewalld:
     service: http

@@ -5,54 +5,58 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 
 MACHINES = {
     :balancer=>{
-        :box_name => "centos/7"
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 256,
+        :memory => "256",
         :net => [
             {ip:'10.0.10.2', adapter:2,netmask:"255.255.255.0"}
         ]
     },
     :node1=>{
-        :box_name => "centos/7"
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 256,
+        :memory => "256",
         :net => [
-            {ip:'192.168.53.2', adapter:2,netmask:"255.255.255.0"}
+            {ip:'192.168.11.2', adapter:2,netmask:"255.255.255.0"}
         ]
     },
     :node2=>{
-        :box_name => "centos/7"
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 256,
+        :memory => "256",
         :net => [
-            {ip:'192.168.53.3', adapter:2,netmask:"255.255.255.0"}
+            {ip:'192.168.11.3', adapter:2,netmask:"255.255.255.0"}
         ]
     },
     :monitoring => {
-        :box_name => "centos/7"
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 2048,
+        :memory => "2048",
         :net => [
             {ip:'172.16.1.2', adapter:2,netmask:"255.255.255.0"}
         ]
     },
     :backup =>{
-        :box_name => "centos/7"
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 256,
+        :memory => "256",
         :net => [
             {ip:'172.16.1.3', adapter:2,netmask:"255.255.255.0"}
         ]
     },
-    :firewall =>{
-        :box_name => "centos/7"
+    :fw =>{
+        :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => 256,
+        :memory => "256",
         :net => [
-            {ip:'10.0.10.1', adapter:2,netmask:"255.255.255.0"},
-            {ip:'172.16.1.1', adapter:3,netmask:"255.255.255.0"},
-            {ip:'192.168.53.1', adapter:4,netmask:"255.255.255.0"}
-        ]
+            {ip:'10.0.10.10', adapter:2,netmask:"255.255.255.0"},
+	    {ip:'172.16.1.10', adapter:3,netmask:"255.255.255.0"},
+#            {ip:'172.16.1.5', adapter:5,netmask:"255.255.255.0"},
+            {ip:'192.168.11.10', adapter:4,netmask:"255.255.255.0"}
+        ],
+	:ports => [
+	    {guest: 443, host: 8082}
+	]
     }
 }
 
@@ -72,7 +76,11 @@ Vagrant.configure("2") do |config|
           boxconfig[:net].each do |ipconf|
             box.vm.network "private_network", ipconf
           end
-          
+          if boxconfig.key?(:ports)
+	    boxconfig[:ports].each do |portconf|
+              box.vm.network "forwarded_port", portconf
+	    end
+	  end
           if boxconfig.key?(:public)
             box.vm.network "public_network", boxconfig[:public]
           end
@@ -85,14 +93,14 @@ Vagrant.configure("2") do |config|
             sysctl --system > /dev/null
           SHELL
           
-        if index == MACHINES.size - 1
-           box.vm.provision "ansible" do |ansible|
-            ansible.playbook = "ansible/playbook.yml"
-            ansible.limit = "all"
-            ansible.inventory_path = "ansible/hosts.yml"
-            ansible.host_key_checking = false
-          end
-        end
+#        if index == MACHINES.size - 1
+#           box.vm.provision "ansible" do |ansible|
+#            ansible.playbook = "ansible/playbook.yml"
+#            ansible.limit = "all"
+#            ansible.inventory_path = "ansible/hosts.yml"
+#            ansible.host_key_checking = false
+#          end
+#        end
     	end
   	end
 end
