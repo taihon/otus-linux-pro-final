@@ -12,8 +12,7 @@
   when:
     - replication_role == "master"
   register: find_wp_backup_files
-- set_fact:
-    wp_backup_files="{{ find_wp_backup_files.files|map(attribute='path')|list }}"
+- set_fact: wp_backup_files="{{ find_wp_backup_files.files|map(attribute='path')|list }}"
   when:
     - replication_role == "master"
 
@@ -37,8 +36,16 @@
 - name: zcat backup gz files into '{{ wpdb_dbname }}'
   ansible.builtin.shell: zcat {{ item }} | mysql --skip-column-names {{ wpdb_dbname }}
   with_items: "{{ wp_backup_files }}"
-  when:
-    - replication_role == "master"
   async: 60
   poll: 0
+  when:
+    - replication_role == "master"
+- name: Force site_url in wp_options
+  community.mysql.mysql_query:
+    login_db: "{{ wpdb_dbname }}"
+    query: update wp_options set option_value=%(site_url)s where option_id=2
+    named_args:
+      site_url: "https://{{wpdb_site_host}}"
+  when:
+    - replication_role == "master"
 #leaves some garbage behind

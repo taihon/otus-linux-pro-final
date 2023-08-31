@@ -80,8 +80,9 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
-define( 'WP_HOME', 'http://{{ loadbalancer_ip }}' );
-define( 'WP_SITEURL', 'http://{{ loadbalancer_ip }}' );
+
+define( 'WP_HOME', 'http://{{ wpdb_site_host }}' );
+define( 'WP_SITEURL', 'http://{{ wpdb_site_host }}' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 

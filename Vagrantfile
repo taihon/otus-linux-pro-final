@@ -7,7 +7,7 @@ MACHINES = {
     :balancer=>{
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "256",
+        :memory => "1024",
         :net => [
             {ip:'10.0.10.2', adapter:2,netmask:"255.255.255.0"}
         ]
@@ -15,7 +15,7 @@ MACHINES = {
     :node1=>{
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "256",
+        :memory => "512",
         :net => [
             {ip:'192.168.11.2', adapter:2,netmask:"255.255.255.0"}
         ]
@@ -23,7 +23,7 @@ MACHINES = {
     :node2=>{
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "256",
+        :memory => "512",
         :net => [
             {ip:'192.168.11.3', adapter:2,netmask:"255.255.255.0"}
         ]

@@ -21,11 +21,17 @@
   when:
     - hostvars[item].replication_role == 'master'
     - master_ip is not defined
-- set_fact:
-    loadbalancer_ip: "{{ hostvars[item]['ansible_host'] }}"
-  with_items: "{{ groups.frontends | first }}"
-  when:
-    - loadbalancer_ip is not defined
+    #  - set_fact:
+    #     loadbalancer_ip: "{{ hostvars[item]['ansible_host'] }}"
+    #   with_items: "{{ groups.frontends | first }}"
+    #   when:
+    #     - loadbalancer_ip is not defined
+# - set_fact:
+#     control_node_ip: "{{ hostvars['127.0.0.1']['ansible_default_ipv4']['address'] }}"
+#   run_once: true
+#   delegate_to: localhost
+#   delegate_facts: true
+
 - name: Copy wp-config
   ansible.builtin.template:
     src: "wp-config.php.j2"

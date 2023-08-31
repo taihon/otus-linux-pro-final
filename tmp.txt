@@ -1,0 +1,46 @@
+
+
+
+#balancer
+
+upstream backend {
+    server 192.168.11.2:81;
+        server 192.168.11.3:81;
+	  }
+
+	  server {
+	    listen 80; #listen on port 80
+	      server_name web.app;
+	        location / {
+		    proxy_read_timeout 300s;
+		        proxy_pass http://backend; #pass all requests processed to the backend upstream servers
+			  }
+			  }
+			  server {
+			    listen 8080;
+			      server_name stub;
+			        location /stub_status {
+				    stub_status;
+				      }
+				      }
+				      server {
+				        listen 443;
+					  server_name mynginx;
+					    location /metric/nginx {
+					        proxy_pass http://10.0.10.2:9113/metrics;
+						  }
+						    location / {
+						        root /usr/share/nginx/html/;
+							  }
+							  }
+
+
+							  setsebool httpd_can_network_connect on -P
+
+							  firewall-cmd --add-service=https
+
+
+							  #fw
+							  firewall-cmd --add-forward-port=port=443:proto=tcp:toport=443:toaddr=10.0.10.2
+							  firewall-cmd --add-masquerade
+							  firewall-cmd --add-service=https

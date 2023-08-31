@@ -2,6 +2,13 @@
   ansible.builtin.yum:
     name: nginx
     state: present
+- name: Install packages required for setsebool
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libselinux-python
+    - libsemanage-python
 - name: Apply default.conf
   template:
     src: "nginx.conf.j2"
@@ -16,9 +23,19 @@
     name: firewalld
     enabled: yes
     state: started
-- name: Open firewall ports
+- name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+# - name: hacky - setsebool httpd_can_network_connect
+#   ansible.builtin.command: setsebool -P httpd_can_network_connect 1
+- name: Add firewall services
   ansible.posix.firewalld:
-    service: http
+    service: "{{ item }}"
     permanent: yes
     immediate: yes
     state: enabled
+  with_items:
+    - http
+    - https
