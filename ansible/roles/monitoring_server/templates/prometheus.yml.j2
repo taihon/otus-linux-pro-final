@@ -22,3 +22,5 @@ scrape_configs:
       - targets: ['{{ hostvars[node]['ansible_host'] }}:9113']
         labels: {'host': '{{ node }}' }
 {% endfor %}
+rule_files:
+  - "alerts.yml"

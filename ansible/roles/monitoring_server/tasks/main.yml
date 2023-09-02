@@ -1,3 +1,6 @@
+- name: Install alertmanager for RHEL
+  import_tasks: install-alertmanager.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
 - name: Install prometheus for RHEL
   import_tasks: install-prometheus.yml
   when: ansible_facts['os_family']|lower == 'redhat'

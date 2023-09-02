@@ -23,6 +23,12 @@
   template:
     src: "prometheus.yml.j2"
     dest: "/etc/prometheus/prometheus.yml"
+- name: Copy alert rules
+  copy:
+    src: alerts.yml
+    dest: /etc/prometheus/
+    owner: "prometheus"
+    mode: 0755
 - name: create /var/lib/promуtheus/data
   file:
     state: directory

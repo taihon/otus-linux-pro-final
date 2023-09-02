@@ -2,6 +2,9 @@
 ansible/files/*.rpm
 ansible/files/prometheus
 ansible/files/node_exporter
+ansible/files/amtool
+ansible/files/alertmanager
 ansible/files/apache_exporter
 ansible/files/nginx-prometheus-exporter
 ansible/files/*.tar.gz
+ansible/files/*.token

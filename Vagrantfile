@@ -15,7 +15,7 @@ MACHINES = {
     :node1=>{
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "512",
+        :memory => "1024",
         :net => [
             {ip:'192.168.11.2', adapter:2,netmask:"255.255.255.0"}
         ]
@@ -23,7 +23,7 @@ MACHINES = {
     :node2=>{
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "512",
+        :memory => "1024",
         :net => [
             {ip:'192.168.11.3', adapter:2,netmask:"255.255.255.0"}
         ]
@@ -34,6 +34,10 @@ MACHINES = {
         :memory => "2048",
         :net => [
             {ip:'172.16.1.2', adapter:2,netmask:"255.255.255.0"}
+        ],
+        :ports => [
+            {guest: 9093, host: 9093},
+            {guest: 9090, host: 9090}
         ]
     },
     :backup =>{

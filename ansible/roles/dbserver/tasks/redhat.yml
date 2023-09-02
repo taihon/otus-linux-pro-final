@@ -3,10 +3,10 @@
     name: "{{ item }}"
     state: absent
   with_items:
-      - "mysql-connectors-community/x86_64"
-      - "mysql-tools-community/x86_64"
-      - "mysql56-community/x86_64"
-      - "mysql-community"
+    - "mysql-connectors-community/x86_64"
+    - "mysql-tools-community/x86_64"
+    - "mysql56-community/x86_64"
+    - "mysql-community"
 - name: Install and enable repo
   ansible.builtin.yum:
     name: "https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm"
@@ -18,10 +18,10 @@
 - name: Install mysql
   ansible.builtin.yum:
     enablerepo: "mysql80-community"
-    name: 
-    - mysql-community-server
-    - mysql-community-client
-    - MySQL-python
+    name:
+      - mysql-community-server
+      - mysql-community-client
+      - MySQL-python
     state: present
 - name: Copy my.cnf from template
   template:

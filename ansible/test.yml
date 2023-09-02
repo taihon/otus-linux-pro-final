@@ -1,5 +1,8 @@
 ---
 - hosts: localhost
+  # vars:
+  # contents: "{{ lookup('file', telegram_bot_token_file) }}"
   tasks:
-    - name: Print my local address
-      debug: msg="{{ hostvars['127.0.0.1']['ansible_default_ipv4']['address'] }}"
+    - set_fact:
+        contents: "{{ lookup('file', telegram_bot_token_file) }}"
+    - debug: msg="contents is {{ contents }}"
