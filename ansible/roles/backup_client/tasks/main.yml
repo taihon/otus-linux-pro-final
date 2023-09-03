@@ -1,0 +1,26 @@
+---
+- name: Install borgbackup
+  ansible.builtin.yum:
+    name: borgbackup
+    state: present
+- name: Generate keypair
+  become: true
+  community.crypto.openssh_keypair:
+    group: root
+    path: /root/.ssh/id_rsa
+  register: ssh_key
+- name: Grab public key from client to control node
+  ansible.builtin.fetch:
+    src: /root/.ssh/id_rsa.pub
+    dest: "files/backup/{{ ansible_hostname }}_id_rsa.pub"
+    flat: true
+# - set_fact:
+#     backup_central_server: "{{ hostvars[item]['ansible_host'] }}"
+#   with_items: "{{ groups.backup_servers }}"
+# - name: Pass public key to backup server
+#   delegate_to: "{{ backup_central_server }}"
+#   ansible.posix.authorized_key:
+#     key: "{{ ssh_key.public_key }}"
+#     comment: "{{ ansible_hostname }}"
+#     user: borg
+#     key_options: 'command="/usr/bin/borg serve"'

@@ -8,3 +8,4 @@ ansible/files/apache_exporter
 ansible/files/nginx-prometheus-exporter
 ansible/files/*.tar.gz
 ansible/files/*.token
+ansible/files/backup/*.pub
