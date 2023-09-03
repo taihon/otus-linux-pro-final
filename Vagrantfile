@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
 	    end
 	  end
           if boxconfig.key?(:public)
-            box.vm.network "public_network", boxconfig[:public]
+#            box.vm.network "public_network" boxconfig[:public]
           end
   
           box.vm.provision "shell", inline: <<-SHELL
