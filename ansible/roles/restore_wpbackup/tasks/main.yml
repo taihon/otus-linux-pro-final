@@ -21,26 +21,26 @@
   register: last_backup_name
   when:
     - replication_role == "master"
-# - name: Check if production backup exists
-#   ansible.builtin.stat:
-#     path: /var/backup/wordpress/wp_options.gz
-#   register: prod_backup
-#   when:
-#     - replication_role == "master"
 - name: dbg
   debug:
     var: last_backup_name
-- name: List initial backups
-  include_tasks: list-initial-backups.yml
-  # when: not prod_backup.stat.exists and replication_role == "master"
-  when: 
-    - replication_role == "master"
-    - last_backup_name.stdout|length == 0
 - name: List production backups
   include_tasks: list-prod-backups.yml
   when: 
     - replication_role == "master"
     - last_backup_name.stdout|length > 0
+- name: Check if production backup exists
+  ansible.builtin.stat:
+    path: /var/backup/wordpress/wp_options.gz
+  register: prod_backup
+  when:
+    - replication_role == "master"
+- name: List initial backups
+  include_tasks: list-initial-backups.yml
+  # when: not prod_backup.stat.exists and replication_role == "master"
+  when: 
+    - replication_role == "master"
+    - (last_backup_name.stdout|length == 0) or (not prod_backup.stat.exists)
   # when: prod_backup.stat.exists and replication_role == "master"
 #   when:
 #     - replication_role == "master"
