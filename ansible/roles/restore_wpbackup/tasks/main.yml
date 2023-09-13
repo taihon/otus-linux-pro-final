@@ -1,14 +1,47 @@
 ---
-- name: Check if production backup exists
-  ansible.builtin.stat:
-    path: /var/backup/wordpress/wp_options.gz
-  register: prod_backup
+- name: Add environment variable for borg
+  vars:
+    os_environment:
+    - key: BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK
+      value: "yes"
+  ansible.builtin.lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ os_environment }}"
+- set_fact:
+    backup_central_server: "{{ hostvars[item]['ansible_host'] }}"
+  with_items: "{{ groups.backup_servers }}"
+- set_fact:
+    backup_prefix: "{{hostvars[inventory_hostname]['backup_prefix']}}"
+- name: Get last backup name
+  ansible.builtin.shell:
+    cmd: "borg list borg@{{ backup_central_server|quote }}:backups|grep -i '{{ backup_prefix|quote}}'|tail -1|cut -f1 -d' '"
+  register: last_backup_name
+  when:
+    - replication_role == "master"
+# - name: Check if production backup exists
+#   ansible.builtin.stat:
+#     path: /var/backup/wordpress/wp_options.gz
+#   register: prod_backup
+#   when:
+#     - replication_role == "master"
+- name: dbg
+  debug:
+    var: last_backup_name
 - name: List initial backups
   include_tasks: list-initial-backups.yml
-  when: not prod_backup.stat.exists
+  # when: not prod_backup.stat.exists and replication_role == "master"
+  when: 
+    - replication_role == "master"
+    - last_backup_name.stdout|length == 0
 - name: List production backups
   include_tasks: list-prod-backups.yml
-  when: prod_backup.stat.exists
+  when: 
+    - replication_role == "master"
+    - last_backup_name.stdout|length > 0
+  # when: prod_backup.stat.exists and replication_role == "master"
 #   when:
 #     - replication_role == "master"
 #     - (find_wp_backup_files.files|length)>0

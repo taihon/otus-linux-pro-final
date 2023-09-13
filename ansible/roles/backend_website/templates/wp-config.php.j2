@@ -80,7 +80,11 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
-
+if ( $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' )
+{
+    $_SERVER['HTTPS']       = 'on';
+    $_SERVER['SERVER_PORT'] = 443;
+}
 define( 'WP_HOME', 'https://{{ wpdb_site_host }}' );
 define( 'WP_SITEURL', 'https://{{ wpdb_site_host }}' );
 
