@@ -45,7 +45,7 @@
     line: "{{ item.line }}"
   with_items:
     - regex: "^;root_url"
-      line: "%(protocol)s://%(domain)s:%(http_port)s/internal/grafana/"
+      line: "root_url = %(protocol)s://%(domain)s:%(http_port)s/internal/grafana/"
     - regex: "^;serve_from_sub_path"
       line: "serve_from_sub_path = true"
 - name: Ensure grafana enabled and started

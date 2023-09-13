@@ -10,7 +10,8 @@ Type=simple
 ExecStart=/usr/local/bin/alertmanager \
 --config.file=/etc/alertmanager/alertmanager.yml \
 --storage.path=/var/lib/prometheus/alertmanager \
---web.external-url http://{{wpdb_site_host}}:8082 \
+--web.external-url http://{{wpdb_site_host}} \
+--web.route-prefix=/internal/alerts \
 $ALERTMANAGER_OPTS
 ExecReload=/bin/kill -HUP $MAINPID
 RestartSec=60

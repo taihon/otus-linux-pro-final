@@ -42,3 +42,9 @@
     state: restarted
     name: "alertmanager.service"
   notify: restart_alertmanager_server
+- name: Open port 9093 in firewalld
+  ansible.posix.firewalld:
+    port: 9093/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled

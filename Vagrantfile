@@ -28,18 +28,6 @@ MACHINES = {
             {ip:'192.168.11.3', adapter:2,netmask:"255.255.255.0"}
         ]
     },
-    :monitoring => {
-        :box_name => "centos/7",
-        :box_version => "2004.1",
-        :memory => "3500",
-        :net => [
-            {ip:'172.16.1.2', adapter:2,netmask:"255.255.255.0"}
-        ],
-        :ports => [
-            {guest: 9093, host: 9093},
-            {guest: 9090, host: 9090}
-        ]
-    },
     :backup =>{
         :box_name => "centos/7",
         :box_version => "2004.1",
@@ -61,6 +49,18 @@ MACHINES = {
 	:ports => [
 	    {guest: 443, host: 8082}
 	]
+    },
+    :monitoring => {
+        :box_name => "centos/7",
+        :box_version => "2004.1",
+        :memory => "3500",
+        :net => [
+            {ip:'172.16.1.2', adapter:2,netmask:"255.255.255.0"}
+        ],
+        :ports => [
+            {guest: 9093, host: 9093},
+            {guest: 9090, host: 9090}
+        ]
     }
 }
 
