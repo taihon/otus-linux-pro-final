@@ -3,21 +3,13 @@
   roles:
     - { role: ntp_client, tags: ntp_client_tag, become: yes }
     - { role: general_settings, become: yes, tags: general }
-# - hosts: all
-#   gather_facts: false
-#   tasks:
-#     - set_fact:
-#         control_node_ip: "{{ hostvars['127.0.0.1']['ansible_default_ipv4']['address'] }}"
-#       run_once: true
-#       delegate_to: localhost
-#       delegate_facts: true
 - hosts: frontends
+  become: yes
   roles:
     - role: certs_gen
       tags: certs
     - role: frontend_nginx
       tags: front_tag
-  become: yes
 - hosts: backends
   become: yes
   roles:
@@ -26,6 +18,16 @@
     - role: backend_php
     - role: backend_website
       tags: backend_website_tag
+- hosts: backup_clients
+  become: yes
+  roles: 
+    - role: backup_client
+      tags: backup_cl_tag
+- hosts: backup_servers
+  become: yes
+  roles:
+    - role: backup_server
+      tags: backup_srv_tag
 - hosts: dbservers
   become: yes
   roles:
@@ -38,6 +40,8 @@
   roles:
     - role: monitoring_server
       tags: monitoring_server_tag
+    - role: logger_server
+      tags: logger_tag
 - hosts: monitored
   become: yes
   roles:
@@ -47,12 +51,10 @@
       tags: logging_node_tag
 - hosts: backup_clients
   become: yes
-  roles: 
-    - role: backup_client
-      tags: backup_cl_tag
-
-- hosts: backup_servers
+  roles:
+    - role: borg_autobackup
+- hosts: firewalls
   become: yes
   roles:
-    - role: backup_server
-      tags: backup_srv_tag
+    - role: fw_dmz
+      tags: router_tag

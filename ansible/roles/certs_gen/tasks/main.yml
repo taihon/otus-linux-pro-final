@@ -10,6 +10,7 @@
     - python2-pip
 - name: upgrade pip
   ansible.builtin.command: pip install --upgrade pip==20.3
+  changed_when: false
 - name: install cryptography
   ansible.builtin.pip:
     name: cryptography

@@ -31,7 +31,7 @@ MACHINES = {
     :monitoring => {
         :box_name => "centos/7",
         :box_version => "2004.1",
-        :memory => "2048",
+        :memory => "3500",
         :net => [
             {ip:'172.16.1.2', adapter:2,netmask:"255.255.255.0"}
         ],

@@ -20,4 +20,4 @@ TODO:
 2. + терминирование ssl на balancer
 3. + алертинг
 4. дмз+фаер
-5. borg backup (+borgmatic?)
+5. + borg backup (+borgmatic?)

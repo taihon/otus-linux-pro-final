@@ -1,17 +1,30 @@
 ---
-- name: Copy backup to master db server
-  ansible.builtin.copy:
-    src: "files/backup/wordpress"
-    dest: "/tmp/wpbackup"
-  when:
-    - replication_role == "master"
-- name: List filename of per-table backup
-  ansible.builtin.find:
-    paths: "/tmp/wpbackup/wordpress"
-    patterns: "wp*.gz"
-  when:
-    - replication_role == "master"
-  register: find_wp_backup_files
+- name: Check if production backup exists
+  ansible.builtin.stat:
+    path: /var/backup/wordpress/wp_options.gz
+  register: prod_backup
+- name: List initial backups
+  include_tasks: list-initial-backups.yml
+  when: not prod_backup.stat.exists
+- name: List production backups
+  include_tasks: list-prod-backups.yml
+  when: prod_backup.stat.exists
+#   when:
+#     - replication_role == "master"
+#     - (find_wp_backup_files.files|length)>0
+# - name: List filename of per-table backup
+#   ansible.builtin.find:
+#     paths: 
+
+#       - "/var/backup/wordpress"
+#     patterns: "wp*.gz"
+#   when:
+#     - replication_role == "master"
+#     - backups_exist is not defined
+#   register: find_wp_backup_files
+# - name: dbg
+#   debug:
+#     var: find_wp_backup_files
 - set_fact: wp_backup_files="{{ find_wp_backup_files.files|map(attribute='path')|list }}"
   when:
     - replication_role == "master"

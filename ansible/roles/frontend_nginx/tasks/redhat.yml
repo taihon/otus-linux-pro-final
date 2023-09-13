@@ -9,6 +9,12 @@
   with_items:
     - libselinux-python
     - libsemanage-python
+- set_fact:
+    kibana_server: "{{ hostvars[item]['ansible_host'] }}"
+  with_items: "{{ groups.logging }}"
+- set_fact:
+    grafana_server: "{{ hostvars[item]['ansible_host'] }}"
+  with_items: "{{ groups.monitoring }}"
 - name: Apply default.conf
   template:
     src: "nginx.conf.j2"

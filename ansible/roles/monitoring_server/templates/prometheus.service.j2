@@ -1,7 +1,12 @@
 [Service]
 User=prometheus
 Group=prometheus
-ExecStart=/usr/bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus/data --storage.tsdb.retention.time=8928h
+ExecStart=/usr/bin/prometheus \
+--config.file=/etc/prometheus/prometheus.yml \
+--storage.tsdb.path=/var/lib/prometheus/data \
+--storage.tsdb.retention.time=8928h \
+--web.listen-address=0.0.0.0:9090 \
+--web.external-url=/internal/prometheus
 ExecReload=/bin/kill -HUP $MAINPID
 
 [Install]

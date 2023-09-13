@@ -1,0 +1,37 @@
+---
+- name: Add environment variable for borg
+  vars:
+    os_environment:
+    - key: BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK
+      value: yes
+  ansible.builtin.lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ os_environment }}"
+- set_fact:
+    backup_central_server: "{{ hostvars[item]['ansible_host'] }}"
+  with_items: "{{ groups.backup_servers }}"
+- set_fact:
+    backup_prefix: "{{hostvars[inventory_hostname]['backup_prefix']}}"
+- name: Get last backup name
+  ansible.builtin.shell: 
+    cmd: "borg list borg@{{ backup_central_server|quote }}:backups|grep -i '{{ backup_prefix|quote}}'|tail -1|cut -f1 -d' '"
+  register: last_backup_name
+  when:
+    - replication_role == "master"
+- name: "Restore last {{hostvars[inventory_hostname]['backup_prefix']}} backup"
+  ansible.builtin.command:
+    cmd: "borg extract borg@{{ backup_central_server|quote }}:backups::{{last_backup_name.stdout|quote}}"
+    chdir: /
+  when:
+    - replication_role == "master"
+- name: List filename of per-table backup
+  ansible.builtin.find:
+    paths: 
+      - "/var/backup/wordpress"
+    patterns: "wp*.gz"
+  when:
+    - replication_role == "master"
+  register: find_wp_backup_files
