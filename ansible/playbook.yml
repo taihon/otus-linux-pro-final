@@ -35,13 +35,6 @@
       tags: dbserver_tag
     - role: restore_wpbackup
       tags: restore_db_tag
-- hosts: monitoring
-  become: yes
-  roles:
-    - role: monitoring_server
-      tags: monitoring_server_tag
-    - role: logger_server
-      tags: logger_tag
 - hosts: monitored
   become: yes
   roles:
@@ -58,3 +51,10 @@
   roles:
     - role: fw_dmz
       tags: router_tag
+- hosts: monitoring
+  become: yes
+  roles:
+    - role: monitoring_server
+      tags: monitoring_server_tag
+    - role: logger_server
+      tags: logger_tag
