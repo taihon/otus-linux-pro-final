@@ -28,6 +28,22 @@ MACHINES = {
             {ip:'192.168.11.3', adapter:2,netmask:"255.255.255.0"}
         ]
     },
+    :apnode1=>{
+        :box_name => "centos/7",
+        :box_version => "2004.1",
+        :memory => "1024",
+        :net => [
+            {ip:'192.168.11.4', adapter:2,netmask:"255.255.255.0"}
+        ]
+    },
+    :apnode2=>{
+        :box_name => "centos/7",
+        :box_version => "2004.1",
+        :memory => "1024",
+        :net => [
+            {ip:'192.168.11.5', adapter:2,netmask:"255.255.255.0"}
+        ]
+    },
     :backup =>{
         :box_name => "centos/7",
         :box_version => "2004.1",
